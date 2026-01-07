@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Percentage Error Calculator – Advanced & Accurate</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root{
+  --primary:#2563eb;
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --radius:14px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Arial;
+  background:var(--bg);
+}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:24px;
+}
+.card{
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:28px;
+  box-shadow:0 12px 32px rgba(0,0,0,.08);
+}
+h1{margin:0;color:var(--primary)}
+small{color:#555}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:16px;
+  font-size:17px;
+  background:var(--primary);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+}
+button:hover{opacity:.95}
+
+.result{font-weight:700;font-size:18px}
+.formula,.steps{font-size:14px;color:#444;line-height:1.6}
+.error{color:#dc2626;font-weight:600;margin-top:10px}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<div class="card">
+<h1>Percentage Error Calculator</h1>
+<small>Accurate experimental error analysis · International standards</small>
+
+<br>
+
+<div class="grid">
+  <input id="measured" type="number" step="any" placeholder="Measured Value">
+  <input id="trueVal" type="number" step="any" placeholder="True / Accepted Value">
+</div>
+
+<br>
+<button onclick="calculate()">Calculate</button>
+<div id="error" class="error"></div>
+</div>
+
+<br>
+
+<div class="grid">
+  <div class="card">
+    <div id="output" class="result">Result = —</div>
+  </div>
+  <div class="card">
+    <div class="formula">
+      <b>Formula Used</b><br><br>
+      Percentage Error = |(Measured − True) / True| × 100
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="card">
+  <div id="steps" class="steps">
+    <b>Step-by-Step Solution</b><br><br>—
+  </div>
+</div>
+
+</div>
+
+<script>
+function calculate(){
+  const err=document.getElementById("error");
+  err.innerText="";
+
+  const measured=parseFloat(document.getElementById("measured").value);
+  const trueVal=parseFloat(document.getElementById("trueVal").value);
+
+  if(isNaN(measured)||isNaN(trueVal)){
+    err.innerText="Please enter valid numeric values.";
+    return;
+  }
+  if(trueVal===0){
+    err.innerText="True value cannot be zero.";
+    return;
+  }
+
+  const diff=measured-trueVal;
+  const absError=Math.abs(diff);
+  const relError=diff/trueVal;
+  const percentError=Math.abs(relError)*100;
+
+  const classification =
+    diff>0 ? "Overestimate" :
+    diff<0 ? "Underestimate" :
+    "Exact Match";
+
+  document.getElementById("output").innerHTML=`
+    Percentage Error = ${percentError.toFixed(6)} %<br>
+    Absolute Error = ${absError.toFixed(6)}<br>
+    Relative Error = ${relError.toFixed(6)}<br>
+    Type = ${classification}
+  `;
+
+  document.getElementById("steps").innerHTML=`
+    <b>Step-by-Step Solution</b><br><br>
+    Difference = Measured − True = ${measured} − ${trueVal} = ${diff}<br>
+    Absolute Error = |${diff}| = ${absError}<br>
+    Relative Error = ${diff} / ${trueVal} = ${relError}<br>
+    Percentage Error = |${relError}| × 100 = ${percentError.toFixed(6)} %
+  `;
+}
+</script>
+
+</body>
+</html>
